@@ -1,1 +1,4 @@
-# Sistem_Programlama_Proje
+Kadir Çelik
+Mücahid Işık
+Duhan Uzun
+Hüseyin Hira
