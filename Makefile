@@ -6,7 +6,7 @@ all: kripto
 
 
 kripto: ./lib/libfdr.a $(TARGET).c
-    gcc -I$(INC) $(TARGET).c -o $@ -L$(LIB) -lfdr
+	gcc -I$(INC) $(TARGET).c -o $@ -L$(LIB) -lfdr
 
 clean:
-    rm -rf kripto
+	rm -rf kripto
