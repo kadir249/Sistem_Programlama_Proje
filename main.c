@@ -5,17 +5,61 @@
 #include "fields.h"
 #include "jval.h"
 #include "jrb.h"
+#include <unistd.h>
+#include <fcntl.h>
+
+int dosyayaYazma(char **args)
+{
+    IS is;
+    
+    int i;
+    is = new_inputstruct(args[2]);
+
+    if (is == NULL) 
+    {
+        perror(args[2]);
+        exit(1);
+    }
+     
+    int fileDescriptor, tempFile;
+    char *temp;
+
+    fileDescriptor = open(args[3], O_WRONLY | O_CREAT | O_TRUNC);
+
+    if (fileDescriptor < 0)
+    {
+        perror(args[3]);
+        exit(1);
+    }
+
+    while(get_line(is) >= 0)
+    {
+        for (i = 0; i < is->NF; i++) 
+        {
+            temp = (char *) malloc(strlen(is->fields[i] + 1));
+            strcpy(temp, is->fields[i]);
+            strcat(temp, " ");
+            tempFile = write(fileDescriptor, temp, strlen(temp));
+        }
+    }
+
+    close(fileDescriptor);
+    jettison_inputstruct(is);
+    return 1;
+}
 
 
 int encode(char **args)
 {
     printf("Encode calisti.\n");
+    dosyayaYazma(args);
     return 1;
 }
 
 int decode(char **args)
 {
     printf("Decode calisti.\n");
+    dosyayaYazma(args);
     return 1;
 }
 
