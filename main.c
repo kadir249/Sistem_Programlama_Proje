@@ -44,7 +44,6 @@ int kilitOkuma()
 int dosyayaYazma(char **args)
 {
     IS is;
-    
     int i;
     is = new_inputstruct(args[2]);
 
