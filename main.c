@@ -12,7 +12,7 @@ int kilitOkuma()
 {
     IS is;
     int i;
-    char *temp1;
+    char *temp1;  
     char *temp2;
 
     is = new_inputstruct(".kilit");
