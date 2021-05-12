@@ -8,36 +8,91 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int kilitOkuma()
+typedef struct 
 {
-    IS is;
-    int i;
-    char *temp1;  
-    char *temp2;
+  char *kelime;
+  char *kod;
+} Kilit;
 
-    is = new_inputstruct(".kilit");
-    if (is == NULL) 
-    {
-        perror(".kilit");
-        exit(1);
-    }
+JRB kilitOkuma(int kontrol)
+{
+	IS is;
+	JRB agac;
+	Kilit *k;
+  	int kboyutu, i;
+	char *temp1;
+	char *temp2;
 
-    while(get_line(is) >= 0) 
-    {
-        if(is->NF > 1)
-        {
-            temp1 = strtok(is->fields[0], ":");
-            temp1 = strtok(temp1, "\"\"");
-            printf("%s\n", temp1);
+  	is = new_inputstruct(".kilit");
+	agac = make_jrb();
 
-            temp2 = strtok(is->fields[1], ",");
-            temp2 = strtok(is->fields[1], "\"\"");
-            printf("%s\n", temp2);
-        }
-    }
+  	if (is == NULL) 
+	{
+    	perror(".kilit");
+    	exit(1);
+  	}
 
-    jettison_inputstruct(is);
-    return 1;
+	if(kontrol == 0)
+	{
+		while(get_line(is) >= 0) 
+		{
+			if(is->NF > 1)
+			{
+				k = malloc(sizeof(Kilit));
+
+				temp1 = strtok(is->fields[0], ":");
+				temp1 = strtok(temp1, "\"\"");
+
+				kboyutu = strlen(temp1);
+				k->kelime = (char *) malloc(sizeof(char)*(kboyutu + 1));
+      			strcpy(k->kelime, temp1);
+
+				printf("%s\n", k->kelime);
+
+				temp2 = strtok(is->fields[1], ",");
+				temp2 = strtok(is->fields[1], "\"\"");
+
+				kboyutu = strlen(temp2);
+				k->kod = (char *) malloc(sizeof(char)*(kboyutu + 1));
+      			strcpy(k->kod, temp2);
+
+				printf("%s\n", k->kod);
+				jrb_insert_str(agac, k->kelime, new_jval_v((void *) k));	
+			}
+		}			
+	}
+	else
+	{
+		while(get_line(is) >= 0) 
+		{
+			if(is->NF > 1)
+			{
+				k = malloc(sizeof(Kilit));
+
+				temp1 = strtok(is->fields[0], ":");
+				temp1 = strtok(temp1, "\"\"");
+
+				kboyutu = strlen(temp1);
+				k->kelime = (char *) malloc(sizeof(char)*(kboyutu + 1));
+      			strcpy(k->kelime, temp1);
+
+				printf("%s\n", k->kelime);
+
+				temp2 = strtok(is->fields[1], ",");
+				temp2 = strtok(is->fields[1], "\"\"");
+
+				kboyutu = strlen(temp2);
+				k->kod = (char *) malloc(sizeof(char)*(kboyutu + 1));
+      			strcpy(k->kod, temp2);
+
+				printf("%s\n", k->kod);
+				jrb_insert_str(agac, k->kod, new_jval_v((void *) k));	
+			}
+		}			
+	}
+
+  	jettison_inputstruct(is);
+	return agac;	
 }
 
 
@@ -81,30 +136,37 @@ int dosyayaYazma(char **args)
 }
 
 
-int encode(char **args)
+int encode(char **args, JRB agac)
 {
-    printf("Encode calisti.\n");
-    kilitOkuma();
-    dosyayaYazma(args);
-    return 1;
+	dosyayaYazma(args);
+	return 1;
 }
 
-int decode(char **args)
+int decode(char **args, JRB agac)
 {
-    printf("Decode calisti.\n");
-    kilitOkuma();
-    dosyayaYazma(args);
-    return 1;
+	dosyayaYazma(args);
+	return 1;
 }
 
 static int calistir(char **args)
 {
-    if (args[0] != NULL) 
-    {
-        if (strcmp(args[1], "-e") == 0 && strcmp(args[3], "encripted") == 0) encode(args);
-        else if (strcmp(args[1], "-d") == 0 && strcmp(args[3], "decripted") == 0) decode(args);
-    }
-    return 0;
+   	JRB agac;
+	if (args[0] != NULL) 
+	{
+		if (strcmp(args[1], "-e") == 0 && strcmp(args[3], "encripted") == 0) 
+		{
+			int kontrol = 0;
+			agac = kilitOkuma(kontrol);	
+			encode(args, agac);
+		}
+		else if (strcmp(args[1], "-d") == 0 && strcmp(args[3], "decripted") == 0) 
+		{
+			int kontrol = 1;
+			agac = kilitOkuma(kontrol);			
+			decode(args, agac);
+		}
+	}
+	return 0;
 }
 
 int main(int argc, char *argv[])
