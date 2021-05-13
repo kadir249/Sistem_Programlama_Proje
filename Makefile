@@ -10,3 +10,11 @@ kripto: ./lib/libfdr.a $(TARGET).c
 
 clean:
 	rm -rf kripto
+
+cleanall:
+	rm -rf kripto
+	rm -f *.txt .kilit encripted decripted deneme.txt
+
+run:
+	./kripto -e deneme.txt encripted
+	./kripto -d encripted decripted
