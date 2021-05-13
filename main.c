@@ -96,55 +96,52 @@ JRB kilitOkuma(int kontrol)
 }
 
 
-int dosyayaYazma(char **args)
+int dosyaOkuma(char **args, JRB agac, int kontrol)
 {
-    IS is;
-    int i;
-    is = new_inputstruct(args[2]);
+	IS is;
+  	int i;
 
-    if (is == NULL) 
-    {
-        perror(args[2]);
-        exit(1);
-    }
-     
-    int fileDescriptor, tempFile;
-    char *temp;
+	int fileDescriptor, tempFile;
 
-    fileDescriptor = open(args[3], O_WRONLY | O_CREAT | O_TRUNC);
+  	is = new_inputstruct(args[2]);
+  	if (is == NULL) 
+	{
+    	perror(args[2]);
+    	exit(1);
+  	}
 
-    if (fileDescriptor < 0)
-    {
-        perror(args[3]);
-        exit(1);
-    }
+	fileDescriptor = open(args[3], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  	if (fileDescriptor < 0) 
+	{
+    	perror(args[3]);
+    	exit(1);
+  	}
 
-    while(get_line(is) >= 0)
-    {
-        for (i = 0; i < is->NF; i++) 
-        {
-            temp = (char *) malloc(strlen(is->fields[i] + 1));
-            strcpy(temp, is->fields[i]);
-            strcat(temp, " ");
-            tempFile = write(fileDescriptor, temp, strlen(temp));
-        }
-    }
+  	while(get_line(is) >= 0) 
+	{
+    	for (i = 0; i < is->NF; i++) 
+		{
+			
+			tempFile = write(fileDescriptor, is->fields[i], strlen(is->fields[i]));
+			tempFile = write(fileDescriptor, " ", strlen(" "));				
+			
+		}
+  	}
 
-    close(fileDescriptor);
-    jettison_inputstruct(is);
-    return 1;
+	close(fileDescriptor);
+  	jettison_inputstruct(is);
+	return 1;	
 }
 
-
-int encode(char **args, JRB agac)
+int encode(char **args, JRB agac, int kontrol)
 {
-	dosyayaYazma(args);
+	dosyaOkuma(args, agac, kontrol);
 	return 1;
 }
 
-int decode(char **args, JRB agac)
+int decode(char **args, JRB agac, int kontrol)
 {
-	dosyayaYazma(args);
+	dosyaOkuma(args, agac, kontrol);
 	return 1;
 }
 
@@ -157,13 +154,13 @@ static int calistir(char **args)
 		{
 			int kontrol = 0;
 			agac = kilitOkuma(kontrol);	
-			encode(args, agac);
+			encode(args, agac, kontrol);
 		}
 		else if (strcmp(args[1], "-d") == 0 && strcmp(args[3], "decripted") == 0) 
 		{
 			int kontrol = 1;
 			agac = kilitOkuma(kontrol);			
-			decode(args, agac);
+			decode(args, agac, kontrol);
 		}
 	}
 	return 0;
