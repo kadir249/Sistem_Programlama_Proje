@@ -47,8 +47,6 @@ JRB kilitOkuma(int kontrol)
 				k->kelime = (char *) malloc(sizeof(char)*(kboyutu + 1));
       			strcpy(k->kelime, temp1);
 
-				printf("%s\n", k->kelime);
-
 				temp2 = strtok(is->fields[1], ",");
 				temp2 = strtok(is->fields[1], "\"\"");
 
@@ -56,7 +54,6 @@ JRB kilitOkuma(int kontrol)
 				k->kod = (char *) malloc(sizeof(char)*(kboyutu + 1));
       			strcpy(k->kod, temp2);
 
-				printf("%s\n", k->kod);
 				jrb_insert_str(agac, k->kelime, new_jval_v((void *) k));	
 			}
 		}			
@@ -76,8 +73,6 @@ JRB kilitOkuma(int kontrol)
 				k->kelime = (char *) malloc(sizeof(char)*(kboyutu + 1));
       			strcpy(k->kelime, temp1);
 
-				printf("%s\n", k->kelime);
-
 				temp2 = strtok(is->fields[1], ",");
 				temp2 = strtok(is->fields[1], "\"\"");
 
@@ -85,7 +80,6 @@ JRB kilitOkuma(int kontrol)
 				k->kod = (char *) malloc(sizeof(char)*(kboyutu + 1));
       			strcpy(k->kod, temp2);
 
-				printf("%s\n", k->kod);
 				jrb_insert_str(agac, k->kod, new_jval_v((void *) k));	
 			}
 		}			
