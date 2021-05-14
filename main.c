@@ -100,6 +100,8 @@ int dosyaOkuma(char **args, JRB agac, int kontrol)
 {
 	IS is;
   	int i;
+	JRB temp1;
+	Kilit *k;
 
 	int fileDescriptor, tempFile;
 
@@ -121,11 +123,28 @@ int dosyaOkuma(char **args, JRB agac, int kontrol)
 	{
     	for (i = 0; i < is->NF; i++) 
 		{
-			
-			tempFile = write(fileDescriptor, is->fields[i], strlen(is->fields[i]));
-			tempFile = write(fileDescriptor, " ", strlen(" "));				
-			
-		}
+			temp1 = jrb_find_str(agac, is->fields[i]);
+			if(temp1 == NULL)
+			{
+				tempFile = write(fileDescriptor, is->fields[i], strlen(is->fields[i]));
+				tempFile = write(fileDescriptor, " ", strlen(" "));				
+			}
+			else
+			{
+				if(kontrol == 0)
+				{
+					k = (Kilit *) temp1->val.v;
+					tempFile = write(fileDescriptor, k->kod, strlen(k->kod));
+                	tempFile = write(fileDescriptor, " ", strlen(" "));
+				}
+				else
+				{
+					k = (Kilit *) temp1->val.v;
+					tempFile = write(fileDescriptor, k->kelime, strlen(k->kelime));
+                	tempFile = write(fileDescriptor, " ", strlen(" "));
+				}
+			}
+    	}
   	}
 
 	close(fileDescriptor);
