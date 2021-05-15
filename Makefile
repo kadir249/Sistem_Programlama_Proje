@@ -1,20 +1,18 @@
-INC="./libfdr"
-LIB="./lib"
+LIB="./libfdr"
 TARGET=main
 
 all: kripto
 
-
-kripto: ./lib/libfdr.a $(TARGET).c
-	gcc -I$(INC) $(TARGET).c -o $@ -L$(LIB) -lfdr
+kripto:	./libfdr/libfdr.a $(TARGET).c
+	gcc -I$(LIB) $(TARGET).c -o $@ -L$(LIB) -lfdr
 
 clean:
 	rm -rf kripto
 
 cleanall:
 	rm -rf kripto
-	rm -f *.txt .kilit encripted decripted deneme.txt
+	rm -f *.txt .kilit encripted decripted
 
-run:
-	./kripto -e deneme.txt encripted
+run:	clean kripto
+	./kripto -e ornek_metin.txt encripted
 	./kripto -d encripted decripted
