@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <string.h>
 #include "fields.h"
 #include "jval.h"
 #include "jrb.h"
-#include <unistd.h>
-#include <fcntl.h>
 
 typedef struct 
 {
@@ -54,7 +54,7 @@ JRB kilitOkuma(int kontrol)
 				k->kod = (char *) malloc(sizeof(char)*(kboyutu + 1));
       			strcpy(k->kod, temp2);
 
-				jrb_insert_str(agac, k->kelime, new_jval_v((void *) k));	
+				jrb_insert_str(agac, k->kelime, new_jval_s((char *) k->kod));	
 			}
 		}			
 	}
@@ -80,7 +80,7 @@ JRB kilitOkuma(int kontrol)
 				k->kod = (char *) malloc(sizeof(char)*(kboyutu + 1));
       			strcpy(k->kod, temp2);
 
-				jrb_insert_str(agac, k->kod, new_jval_v((void *) k));	
+				jrb_insert_str(agac, k->kod, new_jval_s((char *) k->kelime));	
 			}
 		}			
 	}
@@ -89,13 +89,11 @@ JRB kilitOkuma(int kontrol)
 	return agac;	
 }
 
-
 int dosyaOkuma(char **args, JRB agac, int kontrol)
 {
 	IS is;
   	int i;
 	JRB temp1;
-	Kilit *k;
 
 	int fileDescriptor, tempFile;
 
@@ -127,14 +125,12 @@ int dosyaOkuma(char **args, JRB agac, int kontrol)
 			{
 				if(kontrol == 0)
 				{
-					k = (Kilit *) temp1->val.v;
-					tempFile = write(fileDescriptor, k->kod, strlen(k->kod));
+					tempFile = write(fileDescriptor, temp1->val.s, strlen(temp1->val.s));
                 	tempFile = write(fileDescriptor, " ", strlen(" "));
 				}
 				else
 				{
-					k = (Kilit *) temp1->val.v;
-					tempFile = write(fileDescriptor, k->kelime, strlen(k->kelime));
+					tempFile = write(fileDescriptor, temp1->val.s, strlen(temp1->val.s));
                 	tempFile = write(fileDescriptor, " ", strlen(" "));
 				}
 			}
@@ -160,20 +156,24 @@ int decode(char **args, JRB agac, int kontrol)
 
 static int calistir(char **args)
 {
-   	JRB agac;
+	JRB agac;
 	if (args[0] != NULL) 
 	{
-		if (strcmp(args[1], "-e") == 0 && strcmp(args[3], "encripted") == 0) 
+		if (strcmp(args[1], "-e") == 0) 
 		{
 			int kontrol = 0;
 			agac = kilitOkuma(kontrol);	
 			encode(args, agac, kontrol);
 		}
-		else if (strcmp(args[1], "-d") == 0 && strcmp(args[3], "decripted") == 0) 
+		else if (strcmp(args[1], "-d") == 0) 
 		{
 			int kontrol = 1;
 			agac = kilitOkuma(kontrol);			
 			decode(args, agac, kontrol);
+		}
+		else
+		{
+	 		printf("Hatali komut. Programi tekrar calistirmayi deneyiniz.\n");
 		}
 	}
 	return 0;
@@ -181,13 +181,13 @@ static int calistir(char **args)
 
 int main(int argc, char *argv[])
 {
-    if(argc == 4)
-    {
-        calistir(argv);
-    }
-    else
-    {
-         printf("Geçersiz parametre. Üç parametre bulunmalıdır.\n");
-    }
-      return 0;
+	if(argc == 4)
+	{
+		calistir(argv);
+	}
+	else
+	{
+	 	printf("Gecersiz parametre. Dort parametre bulunmalidir.\n");
+	}
+  	return 0;
 }
