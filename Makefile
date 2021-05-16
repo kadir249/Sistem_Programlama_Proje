@@ -4,7 +4,7 @@ TARGET=main
 all: kripto
 
 kripto:	./libfdr/libfdr.a $(TARGET).c
-	gcc -I$(LIB) $(TARGET).c -o $@ -L$(LIB) -lfdr
+	gcc -I ./ $(TARGET).c -o $@ -L$(LIB) -lfdr
 
 clean:
 	rm -rf kripto

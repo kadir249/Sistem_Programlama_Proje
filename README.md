@@ -16,6 +16,6 @@ Projemize ilk olarak projede kullanılması zorunlu olan libfdr kütüphanesini 
 4) run komutu: Önce clean daha sonra make komutunu çalıştırır. En sonunda projede bulunan komutları çalıştırır.
 
                                                                        Ek Bilgiler
-1) Projenin çalıştırılabilmesi için bir libfdr klasörünün bulunması gerekmektedir. libfdr klasörünün için "fields.h", "jval.h", "jrb.h" ve libfdr kütüphanesi derlendiğinde oluşan object dosyalarını içinde barındıran "libfdr.a" dosyasının bulunması gerekmektedir.
+1) Projenin çalıştırılabilmesi için bir libfdr klasörünün bulunması gerekmektedir. libfdr klasörünün içinde libfdr kütüphanesi derlendiğinde oluşan object dosyalarını içinde barındıran "libfdr.a" dosyasının bulunması gerekmektedir.
 2) Encode işleminin yapılması için komut satırına "./kripto -e giris_metni cikis_metni" parametrelerinin yazılması gerekmektedir.
 3) Decode işleminin yapılması için komut satırına "./kripto -d giris_metni cikis_metni" parametrelerinin yazılması gerekmektedir.
